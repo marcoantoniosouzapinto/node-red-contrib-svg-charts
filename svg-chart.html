@@ -1,0 +1,156 @@
+<script type="text/javascript">
+    RED.nodes.registerType('svg-chart', {
+        category: 'analysis',
+        color: '#8A2BE2',
+        defaults: {
+            name: {value: ""},
+            chartType: {value: "bar"},
+            color: {value: "#8A2BE2"},
+            bgColor: {value: "#ffffff"},
+            showGrid: {value: "both"},
+            title: {value: ""},
+            width: {value: 600},
+            height: {value: 400},
+            ymin: {value: ""},
+            ymax: {value: ""},
+            ystep: {value: ""},
+            smooth: {value: true}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "icon.svg",
+        label: function() { return this.name || this.title || "Gráfico SVG"; }
+    });
+</script>
+
+<script type="text/html" data-template-name="svg-chart">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Nome</label>
+        <input type="text" id="node-input-name" placeholder="Nome do Nó">
+    </div>
+    <div class="form-row">
+        <label for="node-input-title"><i class="fa fa-header"></i> Título</label>
+        <input type="text" id="node-input-title" placeholder="Título Padrão (pode ser sobrescrito por msg.title)">
+    </div>
+    <div class="form-row">
+        <label for="node-input-chartType"><i class="fa fa-bar-chart"></i> Tipo</label>
+        <select id="node-input-chartType" style="width: 70%">
+            <optgroup label="Cartesianos">
+                <option value="bar">Colunas (Vertical)</option>
+                <option value="bar-h">Barras (Horizontal)</option>
+                <option value="line">Linhas (Suporta Múltiplas)</option>
+                <option value="area">Área</option>
+            </optgroup>
+            <optgroup label="Circulares">
+                <option value="pie">Pizza</option>
+                <option value="donut">Rosca</option>
+            </optgroup>
+        </select>
+    </div>
+    <div class="form-row">
+        <label><i class="fa fa-arrows-v"></i> Escala Y</label>
+        <input type="text" id="node-input-ymin" placeholder="Min" style="width:80px">
+        <input type="text" id="node-input-ymax" placeholder="Max" style="width:80px">
+        <input type="text" id="node-input-ystep" placeholder="Passo" style="width:80px">
+    </div>
+    <div class="form-row">
+        <label for="node-input-bgColor"><i class="fa fa-paint-brush"></i> Fundo</label>
+        <select id="node-input-bgColor" style="width: 70%">
+            <option value="#ffffff">Branco</option>
+            <option value="#f4f4f4">Cinza Claro</option>
+            <option value="#2d2d2d">Modo Escuro (Deep)</option>
+            <option value="transparent">Transparente</option>
+            <optgroup label="Gradientes">
+                <option value="gradient-purple">Gradiente Roxo</option>
+                <option value="gradient-blue">Gradiente Oceano</option>
+                <option value="gradient-sunset">Gradiente Sunset</option>
+                <option value="gradient-dark">Gradiente Noite</option>
+            </optgroup>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-color"><i class="fa fa-tint"></i> Cor Base</label>
+        <input type="color" id="node-input-color" style="width:50px">
+        <label style="width:auto; margin-left:20px"><input type="checkbox" id="node-input-smooth" style="display:inline-block; width:auto; vertical-align:top;"> Suavizar Linhas</label>
+    </div>
+    <div class="form-row">
+        <label for="node-input-showGrid"><i class="fa fa-th"></i> Grade</label>
+        <select id="node-input-showGrid" style="width: 70%">
+            <option value="false">Sem Grade</option>
+            <option value="horizontal">Apenas Horizontal</option>
+            <option value="both">Horizontal e Vertical</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-width">Tamanho</label>
+        <input type="number" id="node-input-width" style="width:100px" placeholder="600"> x 
+        <input type="number" id="node-input-height" style="width:100px" placeholder="400">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="svg-chart">
+    <p>Gera gráficos dinâmicos e elegantes em formato SVG e Base64 para visualização em Dashboards e Relatórios, <b>sem depender de bibliotecas externas</b>.</p>
+
+    <h3>Entradas</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">array de números | array de objetos</span></dt>
+        <dd>Os dados do gráfico. Pode ser um array simples, um array de objetos, ou um formato multi-série.
+            <br><i>Exemplo simples:</i>
+            <pre>[10, 20, 30]</pre>
+            <br><i>Exemplo avançado (Objetos):</i>
+            <pre>[
+  { "value": 10, "label": "Jan", "color": "#ff0000" },
+  { "value": 20, "label": "Fev", "color": "green" }
+]</pre>
+            <br><i>Exemplo Multi-Série (Para Linhas):</i>
+            <pre>[
+  {
+    "series": "Temp A",
+    "color": "#ff0000",
+    "data": [22, 24, 23, 26]
+  },
+  {
+    "series": "Temp B",
+    "color": "#0000ff",
+    "data": [20, 21, 25, 24]
+  }
+]</pre>
+        </dd>
+        <dt class="optional">title <span class="property-type">string</span></dt>
+        <dd>Substitui o título do gráfico dinamicamente.</dd>
+        <dt class="optional">width / height <span class="property-type">number</span></dt>
+        <dd>Altera as dimensões do gráfico dinamicamente (em pixels).</dd>
+    </dl>
+
+    <h3>Saídas</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>O código fonte XML do SVG gerado. Perfeito para integração direta em Dashboards HTML ou bibliotecas de PDF.</dd>
+        <dt>base64 <span class="property-type">string</span></dt>
+        <dd>A imagem codificada em Data URI (<code>data:image/svg+xml;base64,...</code>), pronta para ser inserida na tag HTML <code>&lt;img src="..."&gt;</code> ou para envio de e-mails.</dd>
+    </dl>
+
+    <h3>Integração com PDFMake</h3>
+    <p>O <b>PDFMake</b> possui suporte nativo para renderização vetorial de SVG, o que garante a melhor qualidade de impressão possível sem perder resolução.</p>
+    <p>Para adicionar o gráfico gerado em um relatório PDF, conecte a saída deste nó a uma função (<b>Function node</b>) com o seguinte código para construir o seu <code>docDefinition</code>:</p>
+    <pre>
+var docDefinition = {
+    content: [
+        // Inserindo o gráfico SVG diretamente via msg.payload
+        {
+            svg: msg.payload,
+        },
+    ],
+};
+
+msg.payload = docDefinition;
+return msg;
+    </pre>
+
+    <h3>Dicas de Uso</h3>
+    <ul>
+        <li><b>Auto-Escala:</b> Deixe os campos Min e Max vazios na configuração para que o nó calcule os limites automaticamente com base nos dados fornecidos.</li>
+        <li><b>Suavização:</b> Ative "Suavizar Linhas" para aplicar curvas elegantes de Bezier em gráficos de Linha e Área.</li>
+        <li><b>Dashboard UI:</b> Para mostrar na tela, conecte a um nó <code>ui_template</code> e use: <code>&lt;div ng-bind-html="msg.payload"&gt;&lt;/div&gt;</code>.</li>
+    </ul>
+</script>

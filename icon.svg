@@ -1,0 +1,15 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fundo Roxo Suave -->
+    <rect width="48" height="48" rx="8" fill="#6B46C1"/>
+    
+    <!-- Barras de Gráfico -->
+    <rect x="10" y="26" width="6" height="12" rx="1" fill="white" fill-opacity="0.9"/>
+    <rect x="21" y="18" width="6" height="20" rx="1" fill="white" fill-opacity="0.9"/>
+    <rect x="32" y="10" width="6" height="28" rx="1" fill="white" fill-opacity="0.9"/>
+    
+    <!-- Linha de Tendência -->
+    <path d="M8 32L18 22L28 26L40 10" stroke="#D6BCFA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Detalhe do Ponto Final -->
+    <circle cx="40" cy="10" r="3" fill="#E9D8FD"/>
+</svg>
