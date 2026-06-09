@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-svg-charts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Um pallet para Node-RED que gera gráficos em SVG convertidos para Base64 sem dependências externas.",
   "main": "svg-chart.js",
   "node-red": {
@@ -15,6 +15,13 @@
     "base64",
     "no-dependency"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcoantoniosouzapinto/node-red-contrib-svg-charts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marcoantoniosouzapinto/node-red-contrib-svg-charts/issues"
+  },
   "author": "Marco Antonio Souza Pinto",
   "license": "MIT"
 }
